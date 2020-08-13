@@ -1,4 +1,4 @@
-import {CREATE_POST, FETCH_POSTS, HIDE_ALERT, HIDE_LOADER, SHOW_ALERT, SHOW_LOADER} from "./types";
+import {CREATE_POST, FETCH_POSTS, HIDE_ALERT, HIDE_LOADER, REQUEST_POSTS, SHOW_ALERT, SHOW_LOADER} from "./types";
 
 export function createPost(post) {
     return {
@@ -39,7 +39,7 @@ export function hideAlert() {
 }
 
 export function fetchPosts() {
-    
+    return {type: REQUEST_POSTS}
 
     // return async dispatch => {
     //     try {
@@ -56,11 +56,11 @@ export function fetchPosts() {
     //     catch (e) {
     //         dispatch(showAlert('Что-то пошло не так '))
     //         dispatch(hideLoader())
-    //     }
+    //     }}
 
 
 
-    }
+
 }
 
 //actions - функции, которые нужно вызывать в определенный момент (финальная точка)
