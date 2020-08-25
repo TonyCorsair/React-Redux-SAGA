@@ -1,46 +1,34 @@
-import React from "react";
-import {connect} from "react-redux";
-import {createPost, showAlert} from "../redux/actions";
-import {Alert} from "./Alert";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { createPost, showAlert } from "../redux/actions";
+import { Alert } from "./Alert";
 
-class PostForm extends React.Component {
-    constructor(props) {
-        super(props)
 
-        this.state = {
-            title : ''
-        }
-    }
 
-    submitHandler = event => {
+const PostForm = () => {
+
+   const [title, setTitle] = useState('')
+
+    const { alert } = useSelector(state => ({
+        alert: state.app.alert
+    }))
+
+    const dispatch = useDispatch()
+
+    const submitHandler = event => {
         event.preventDefault()
-        const {title} = this.state
-        if(!title.trim()) {
-            return this.props.showAlert('название поста не может быть пустым')
-        }
+        if (!title.trim())
+            return dispatch(showAlert('название поста не может быть пустым'))
 
-        const newPost = {
+        dispatch(createPost( {
             title, id: Date.now().toString()
-        }
-
-        this.props.createPost(newPost)
-        this.setState({title: ''})
+        }))
+        setTitle('')
     }
 
-
-
-    changeInputHandler = e => {
-        const { name, value } = e.target;
-
-        this.setState({
-            [name]: value,
-        });
-    };
-
-    render() {
         return (
-            <form onSubmit={this.submitHandler}>
-                {this.props.alert && <Alert text={this.props.alert}/>}
+            <form onSubmit={submitHandler}>
+                {alert && <Alert text={alert}/>}
 
                 <div className="form-group">
                     <label htmlFor="title">Заголовок Поста</label>
@@ -48,25 +36,31 @@ class PostForm extends React.Component {
                         type="text"
                         className="form-control"
                         id="title"
-                        value={this.state.title}
+                        value={title}
                         name="title"
-                        onChange = {this.changeInputHandler}
+                        onChange={({ target }) => setTitle(target.value) }
                     />
                 </div>
-                <button className="btn btn-success" type="submit"> Создать </button>
+                <button className="btn btn-success" type="submit"> Создать</button>
             </form>
         )
-    }
+
 }
 
-const mapStateToProps = state => ({
-alert:state.app.alert
-})
+export default PostForm
 
-const mapDispatchToProps = {
-    createPost, showAlert
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(PostForm)
-
-// dispatch - финал2 добавляем нужные экшены через mapDispatchToProps и они станут доступны в props
+// const asd = ({ dispatch, asdasd }) => {
+//     const addWaf = () => {
+//         dispatch(add())
+//     }
+//     const {} = useSelector(state => ({ asdasd: state.gfjfgjfg }))
+//
+//     return <div>213</div>
+// }
+//
+// connect(state => ({ asdasd: state.gfjfgjfg }))(asd)
+//
+//
+// const add = () => ({
+//     type: 'hdjdj', hdh: fhdf, dru: 3142
+// })
